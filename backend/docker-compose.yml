@@ -1,0 +1,35 @@
+services:
+  diary.api:
+    image: ${DOCKER_REGISTRY-}diaryapi
+    build:
+      context: .
+      dockerfile: Diary.Api/Dockerfile
+    ports:
+      - 8080:8080
+    depends_on:
+      - db
+    environment:
+      - ConnectionStrings_diary=Server=net-db;Port=3306:User Id=root;Password=password;Database=db;SSL Mode=Required;
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8080
+    networks:
+      - net-net
+  db:
+    container_name: net-db
+    platform: linux/x86_64
+    image: mysql:8.4
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: db
+      MYSQL_USER: db
+      MYSQL_PASSWORD: password
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    volumes:
+      - ./mysql/data:/var/lib/mysql
+    networks:
+      - net-net
+networks:
+  net-net:
+    driver: bridge
