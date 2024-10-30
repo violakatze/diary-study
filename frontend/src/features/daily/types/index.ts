@@ -19,9 +19,9 @@ const getToday = (): Date => {
   return result
 }
 
-export const defaultValues: InputType = {
+export const getDefaultValues = (): InputType => ({
   id: 0,
   date: getToday(), // JST0時固定
   content: '',
   weather: weather.Sunny
-}
+})

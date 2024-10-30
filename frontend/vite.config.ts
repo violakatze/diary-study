@@ -16,7 +16,8 @@ export default defineConfig(() => {
     plugins: [react({ jsxImportSource: '@emotion/react' }), svgr()],
     test: {
       globals: true,
-      environment: 'jsdom'
+      environment: 'jsdom',
+      setupFiles: 'vitest.setup.ts'
     }
   }
 })

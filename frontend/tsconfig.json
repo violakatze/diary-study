@@ -26,8 +26,7 @@
     /* Linting */
     "strict": true,
 
-    "types": ["vitest/globals"]
+    "types": ["vitest/globals", "vitest/importMeta"]
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "node_modules/vitest/globals.d.ts", "vite.config.ts", "vitest.setup.ts"]
 }

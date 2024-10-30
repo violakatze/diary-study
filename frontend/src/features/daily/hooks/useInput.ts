@@ -1,12 +1,16 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toNumber } from '@/lib/numberUtil'
 import { useSnackbarContext } from '@/providers/SnackbarProvider'
 import { dailyApi } from '../api'
-import { Daily, defaultValues, Mode } from '../types'
+import { Daily, DailySchema, getDefaultValues, Mode } from '../types'
 
+/**
+ * 入力画面フック
+ */
 export const useInput = () => {
   const param = useParams<{ id: string }>()
   const { get, add: apiAdd, update: apiUpdate, remove: apiRemove } = dailyApi()
@@ -23,6 +27,8 @@ export const useInput = () => {
   const onSuccess = (snackbarMessage: string) => {
     setSnackbarMessage?.(snackbarMessage)
   }
+
+  const defaultValues = getDefaultValues()
 
   /**
    * 1件取得する(idが無い場合は試行しない=新規登録時)
@@ -41,7 +47,7 @@ export const useInput = () => {
     }
   })
 
-  const { control, handleSubmit } = useForm<Daily>({ values, defaultValues })
+  const form = useForm<Daily>({ values, defaultValues, resolver: yupResolver(DailySchema) })
 
   if (isGetError) {
     setMessage(error.message)
@@ -98,8 +104,7 @@ export const useInput = () => {
   }
 
   return {
-    control,
-    handleSubmit,
+    form,
     mode,
     isGetError,
     add,
